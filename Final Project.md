@@ -1,142 +1,92 @@
-# Final Project - CS:GO Defusal Bomb Replica
+# CS:GO Bomb Game with Chrome Dino
 
-This project implements a highly realistic CS:GO bomb replica using an ESP32 microcontroller with an authentic game-inspired interface. The device simulates the iconic defusal bomb from Counter-Strike: Global Offensive, complete with arming sequences, countdown timers, authentic sound effects, and multiple defusal methods that mirror the in-game experience.
+## Introduction 
 
-## Core Features
+Welcome to the CS:GO Bomb Game, an interactive embedded systems project developed using ESP32. This project recreates the iconic bomb defusal experience from Counter-Strike: Global Offensive, combined with a Chrome Dino mini-game for an alternative defusal method. During the development of this project, I encountered various challenges including LCD character customization, precise timing mechanisms, keypad debouncing issues, and state machine management for seamless gameplay transitions.
 
-### Bomb States & Interaction
+The idea for this game came from my love for CS:GO and the tension-filled moments when you have to defuse a bomb under time pressure. I wanted to recreate that adrenaline rush in a physical, tangible form. Initially, I planned to make just a simple code-input bomb, but then I thought—why not add a fun twist? That's when I decided to include the Chrome Dino game as an alternative defusal method, giving players two ways to save the day. The 3-attempt limit for the code adds extra pressure, making every decision count!
 
-Idle State: Bomb awaiting arming code input via numeric keypad\
-Arming Sequence: Multi-digit code entry with visual/audio feedback mimicking game mechanics\
-Armed State: Active countdown with escalating beep patterns and LED indicators\
-Defusal Modes: 
-Code-based defusal (enter the same arming code)\
- Mini-game defusal challenge on LCD using keypad navigation
+## Game Description 
 
-Detonation/Success: Explosion sound effects or successful defusal celebration
+The CS:GO Bomb Game is a portable interactive device where you can test your skills in two challenging scenarios: code-breaking and reflex gaming. Your goal is to defuse the armed bomb either by entering the correct code within 3 attempts or by successfully completing the Chrome Dino mini-game—all before time runs out!
 
-### Visual & Audio Feedback
+In short, once the bomb is armed with a custom code, you have 45 seconds to defuse it. You can choose to enter the defusal code directly (but you only get 3 attempts!), or you can play the Chrome Dino game where you must dodge 7 obstacles to automatically defuse the bomb. The beeping gets faster as time runs out, creating an authentic CS:GO atmosphere. One wrong move in the Dino game or the third failed code attempt, and BOOM—it's game over!
 
-LCD Display: Real-time countdown timer, code entry interface, defusal mini-game graphics\
-RGB LED: Color-coded status\
-Sound Effects: MP3 module plays authentic CS:GO sounds\
-Buzzer: Escalating beep frequency as countdown progresses, arming beep, countdown beeps
+## How to Play 
 
-### Hardware Components
+To play the CS:GO Bomb Game, follow these steps:
 
-ESP32 development board\
-LCD 16x2 with I2C module (timer and interface display)\
-4x3 numeric keypad (12 buttons for code entry and mini-game controls)\
-WTV020 MP3 decoder module with MiniSD card (sound effects)\
-40mm 3W speaker (sound output)\
-RGB LED (status indicator)\
-Passive buzzer (countdown beeps)
+### 1. Setup:
 
-### BOM - Bill Of Materials
+When you turn on the device, you'll see the "READY" screen with a green LED indicator. Press * to start setting up the bomb code.
 
-Aprox 200 lei
+### 2. Arming the Bomb:
 
-## Answering the Questions
+- Enter your desired code using the keypad (maximum 7 digits)
+- Press # to delete the last digit if you make a mistake
+- Press * again to confirm and arm the bomb
+- The red LED will start blinking, and the countdown begins!
 
-### Q1 - What is the system boundary?
+### 3. Game Rules:
 
-What is inside the system:
+Your goal is to defuse the bomb before the 45-second timer runs out. You have two options:
 
-ESP32 microcontroller (central intelligence)\
-LCD 16x2 display with I2C (visual output)\
-4x3 numeric keypad (user input - code entry and game controls)\
-WTV020 MP3 decoder module (audio playback)\
-40mm 3W speaker (sound effects output)\
-RGB LED (visual status indicator)\
-Passive buzzer (countdown beeper)\
-MiniSD card (sound effects storage)
+*Option 1: Code Defusal*\
+Press # when the bomb is armed to enter defusal mode\
+Enter the correct code\
+ You have *3 attempts only*—the third wrong attempt causes immediate detonation!\
+Press # to delete digits, * to cancel and return to armed state
 
-What is outside the system:
+*Option 2: Chrome Dino Game*\
+  Press * when the bomb is armed to start the Dino game\
+  Use *any number key (0-9)* to jump over obstacles\
+  Press 8 for an *extended jump* (4 seconds vs normal 400ms)\
+  Successfully dodge *7 obstacles* to defuse the bomb\
+  Hit any obstacle and the bomb explodes!\
+  Press # to exit back to armed state
 
-Computer (initial programming and loading sound files only)\
-Power supply (USB)
+### 4. Objective:
 
-Clear System Boundary:
+Defuse the bomb using either method before time expires. The beeping accelerates as time runs out:\
+  0-10 seconds: Rapid beeping (100ms intervals)\
+  10-20 seconds: Fast beeping (300ms intervals)\
+  20-30 seconds: Medium beeping (500ms intervals)\
+  30-45 seconds: Slow beeping (1000ms intervals)
 
-This is a fully self-contained interactive embedded system. All inputs (keypad), processing (ESP32), storage (SD card), audio (MP3 module + speaker), and visual feedback (LCD + RGB LED + buzzer) exist within one cohesive physical device. The ESP32 orchestrates all components.
+### 5. Winning:
 
-### Q2 - Where Does Intelligence Live?
+You successfully defuse the bomb when:\
+  You enter the correct code within 3 attempts, or you complete the Dino game by dodging 7 obstacles
 
-All game logic, state management, timing, and synchronization happen exclusively on the ESP32. Every other component is a peripheral controlled by the ESP32.
+The green LED will flash, and you'll hear a victory melody!
 
-What the ESP32 handles:
+### 6. Losing:
 
-State machine management - tracking bomb states\
-Keypad input processing - reading numeric codes, validating entries, managing input buffers, interpreting directional navigation for mini-game\
-Dual-mode input interpretation - same keypad buttons serve different functions: digits for code entry, navigation controls for mini-game\
-Code verification logic - storing arming code, comparing with defusal attempts\
-Countdown timer control - precise millisecond timing for bomb countdown\
-Audio synchronization - triggering appropriate sound effects at exact moments (arming beep, countdown ticks, explosion)\
-LCD rendering - displaying timer, code entry interface, mini-game graphics\
-Mini-game logic - cursor movement, win/lose conditions\
-LED control - RGB color sequences synchronized with bomb states\
-Buzzer patterns - escalating beep frequency based on remaining time\
-MP3 module communication - sending playback commands\
-Safety interlocks - ensuring proper state transitions and preventing illegal operations
+The bomb explodes if:\
+  The 45-second timer runs out\
+  You fail to enter the correct code after 3 attempts\
+  You hit an obstacle in the Dino game
 
-### Q3 - What is the hardest technical problem?
+The red LED will flash rapidly, and you'll hear the explosion sound!
 
-Implementing dual-mode keypad functionality while synchronizing multiple timed audio/visual elements and maintaining precise countdown accuracy.
+## Used Components 
 
-Specific Technical Problems:
+The CS:GO Bomb Game incorporates the following components:
 
-#### Dual-Mode Keypad Interpretation:
+  ESP32 development board - main microcontroller\
+  4×3 Matrix Keypad - for code input and game controls\
+  16×2 I2C LCD Display - shows game information and animations\
+  Green LED - indicates ready/defused state\
+  Red LED - indicates armed/explosion state\
+  Passive Buzzer- for sound effects and countdown beeps\
+  Resistors and wires as needed
 
- Same physical buttons must function differently based on context:
-   Code mode\
-   Game mode
+  ## Set-up Picture
+  ![CS-GO-BOMB](https://github.com/user-attachments/assets/32babf2a-b12c-4af2-8cbd-35250c428dec)
 
- #### Mini-Game Graphics on 16x2 LCD
+## Video Showcasing
 
- Must show cursor position clearly\
- Must update display without interfering with timer precision\
+[![CS:GO Bomb Game](https://img.youtube.com/vi/2S69-Q-V2Vc/0.jpg)](https://www.youtube.com/watch?v=2S69-Q-V2Vc)
 
-
-### Q4 - What is the minimum demo?
-
-Arming the bomb with a code, watching a countdown with escalating beeps and synchronized LED, then defusing via the mini-game using keypad navigation.
-
-What This Proves:
-
-Hardware integration works\
-Dual-mode keypad functionality (digits for arming, navigation for game)\
-Core state machine functions\
-Timing precision (accurate countdown continues during mini-game)\
-Audio/visual synchronization (beeps + LED match countdown state)\
-Mini-game logic works
-
-### Q5 - Why is This Not Just a Tutorial?
-
-Hardware wiring is standard, but the dual-mode keypad system, integrated timing engine, and mini-game mechanics are original implementations.
-
-What is Tutorial-Based (Acknowledged):
-
-Wiring ESP32 to LCD I2C, keypad, buzzer - all documented\
-Basic keypad input reading - standard keypad library exists\
-Simple MP3 playback commands - module documentation available\
-RGB LED color control - common patterns
-
-What is Not Tutorial-Based:
-
-#### Dual-Mode Keypad System:
-
- Context-aware input handler that changes button meaning based on state\
- Preventing input errors during mode transitions
-
-
-#### CS:GO-Authentic State Machine
-
-Replicating game behavior requires careful design:
- Exact beep patterns matching in-game bomb\
- Realistic arming/defusal timing windows\
- Sound effect triggering at precise moments 
-
-
-### Do you need an ESP32?
-
-Yes, I want to purchase my own ESP32 to have one for personal projects.
+[CS:GO Bomb Game ](https://www.youtube.com/watch?v=2S69-Q-V2Vc)
+  
